@@ -6,6 +6,11 @@ use Illuminate\Http\Request;
 use App\Post;
 class PostsController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth',['except'=>['index','show']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -43,6 +48,7 @@ class PostsController extends Controller
         $post = new Post;
         $post->title= $request->input('title');
         $post->body= $request->input('body');
+        $post->user_id= auth()->user()->id;
         $post->save();
         return redirect('/posts')->with('success', 'New Post created successfully');
     }
