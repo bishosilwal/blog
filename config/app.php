@@ -165,6 +165,7 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         Unisharp\Ckeditor\ServiceProvider::class,
+        Codesleeve\LaravelStapler\Providers\L5ServiceProvider::class,
 
         /*
          * Package Service Providers...

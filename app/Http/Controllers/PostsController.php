@@ -18,6 +18,7 @@ class PostsController extends Controller
      */
     public function index()
     {
+            
          $posts = Post::orderBy('created_at','desc')->paginate(10);
         return view('posts.index')->with('posts', $posts);
     }
@@ -43,7 +44,8 @@ class PostsController extends Controller
     {
         $this->validate($request,[
             'title'=> 'required',
-            'body'=> 'required'
+            'body'=> 'required',
+            'cover_image'=> 'image|nullable|max:1999'
         ]);
         $post = new Post;
         $post->title= $request->input('title');
@@ -75,6 +77,9 @@ class PostsController extends Controller
     public function edit($id)
     {
         $post = Post::find($id);
+        if(auth()->user()->id !=$post->user_id){
+            return redirect('/posts')->with('error','Unauthorize Page');
+        }
         return view('posts.edit')->with('post',$post);
     }
 
@@ -100,13 +105,16 @@ class PostsController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
+     *laravel file uploading handling package
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         $post = Post::find($id);
+        if(auth()->user()->id !=$post->user_id){
+            return redirect('/posts')->with('error','Unauthorize Page');
+        }
         $post->delete();
         return redirect('/posts')->with('success','Post deleted successfully');
     }
